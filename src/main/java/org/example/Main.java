@@ -10,7 +10,7 @@ public class Main {
         cars.add(new Suzuki("Aerio", 2001, "Автомат", "Серый", 110, false));
         cars.add(new Toyota("Auris", 2006, "Механика", "Голубой", 90, false));
         cars.add(new Toyota("Corolla", 2003, "Механика", "Зеленый", 120, false));
-        cars.add(new BMW("X5", 2018, "Автомат", "White", 184, false));
+        cars.add(new BMW("X5", 2018, "Автомат", "Белый", 184, false));
         cars.add(new BMW("X4", 2014, "Механика", "Красный", 184, false));
         cars.add(new Mercedes("C-Class", 2012, "Автомат", "Зеленый", 200, false));
         cars.add(new Mercedes("W124", 1984, "Автомат", "Серебряный", 72, false));
