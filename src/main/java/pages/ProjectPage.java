@@ -31,13 +31,9 @@ public class ProjectPage extends BasePage {
 
     @FindBy(xpath = "/html/body/div[1]/div/div[1]/div/main/div/div/div/div/div/div/div[2]/div[2]/div/div[1]/div/div[1]/span") private WebElement taskCounter;
 
-    @FindBy(xpath = "/html/body/section/div/div[1]/div/div/form/div/div[2]/div[3]/div[1]/div[1]/div[9]/nav/div/div/ul/li[1]/button") private WebElement clickVisual;
-
     @FindBy(xpath = "/html/body/section/div/div[1]/div/div/form/div/div[2]/div[4]/select/optgroup/option[2]") private WebElement clickVersion;
 
     @FindBy(xpath = "/html/body/div[1]/header/nav/div/div[1]/span/a") private WebElement clickMainPage;
-
-    @FindBy(xpath = "//iframe[contains(@id, 'mce')]") private WebElement iframe;
 
     @FindBy(xpath = "//body[@id='tinymce']/p") private WebElement writeText;
 
