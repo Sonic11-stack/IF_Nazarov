@@ -49,6 +49,7 @@ public class Tests {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
         int updatedTaskCount = projectPage.getTaskCount();
+        projectPage.closeTask();
         Assert.assertEquals(updatedTaskCount, initialTaskCount + 1, "Счётчик задач не обновился!");
     }
 
@@ -62,6 +63,7 @@ public class Tests {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
         int updatedTaskCount = projectPage.getTaskCount();
+        projectPage.closeTask();
         projectPage.findTask("TestSeleniumATHomework");
         projectPage.foundTask();
         String status = projectPage.checkSentense();
@@ -80,14 +82,15 @@ public class Tests {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
         int updatedTaskCount = projectPage.getTaskCount();
+        projectPage.closeTask();
         projectPage.findTask("TestSeleniumATHomework");
         projectPage.foundTask();
         String status = projectPage.checkSentense();
         String version = projectPage.checkVersion();
-        projectPage.selectErrorOption("Это баг", "новый баг");
+        projectPage.selectErrorOption("Это баг", "Новый баг");
         projectPage.createTaskBug();
         Assert.assertTrue(driver.getCurrentUrl().contains("Dashboard"), "Не создана форма бага");
-    } //Я так и не понял, как реализовать закрытие статуса заданий, т.к. появляются проблемы с xpath
+    } // я как понимаю, иногда автотест может не выполнять функции(к примеру, когда он всегда выводит логин и пароль, а 1 раз он просто застынет и остановится тест)
 
     @AfterClass
     public void tearDown() {
