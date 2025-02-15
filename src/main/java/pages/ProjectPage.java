@@ -23,7 +23,6 @@ public class ProjectPage extends BasePage {
     private final SelenideElement inWorking = $(byText("В работе"));
     private final SelenideElement buisnessProcess = $("#opsbar-transitions_more");
     private final SelenideElement isDone = $(byText("Выполнено"));
-    private final SelenideElement findTaskBug = $("//*[@id='10003' and //a[starts-with(text(),'TEST-17')]");
     private final SelenideElement writeTag = $("#labels-textarea");
     private final SelenideElement clickTag = $("#labels-multi-select");
     private final SelenideElement clickListTask = $("#find_link");
