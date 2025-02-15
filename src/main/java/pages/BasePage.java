@@ -1,12 +1,10 @@
 package pages;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+
+import static com.codeborne.selenide.Selenide.*;
 
 public abstract class BasePage {
-    protected WebDriver driver;
 
-    public BasePage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
+    public BasePage() {}
+
+    public void openPage(String url) {open(url);}
 }

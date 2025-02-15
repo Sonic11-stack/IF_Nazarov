@@ -1,21 +1,21 @@
 package pages;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
-public class LoginPage extends BasePage {
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Condition.visible;
 
-    @FindBy(xpath = "//*[@id=\"login-form-username\"]") private WebElement usernameField;
+public class LoginPage {
 
-    @FindBy(xpath = "//*[@id=\"login-form-password\"]") private WebElement passwordField;
+    private final String usernameField = "#login-form-username";
+    private final String passwordField = "#login-form-password";
+    private final String loginButton = "#login";
 
-    @FindBy(xpath = "//*[@id=\"login\"]") private WebElement loginButton;
-
-    public LoginPage(WebDriver driver) {super(driver);}
+    public void openLoginPage(String url) {open(url);}
 
     public void login(String username, String password) {
-        usernameField.sendKeys(username);
-        passwordField.sendKeys(password);
-        loginButton.click();
+        $(usernameField).shouldBe(visible).setValue(username);
+        $(passwordField).shouldBe(visible).setValue(password);
+        $(loginButton).shouldBe(visible).click();
     }
 }
+

@@ -1,52 +1,50 @@
 package tests;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
 import pages.LoginPage;
 import pages.ProjectPage;
-import java.time.Duration;
 
 public class Tests {
-    private WebDriver driver;
     private LoginPage loginPage;
     private ProjectPage projectPage;
-
 
     @BeforeClass
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\konno\\IdeaProjects\\Test_5\\src\\driver\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://edujira.ifellow.ru");
-        loginPage = new LoginPage(driver);
-        projectPage = new ProjectPage(driver);
+        Configuration.browser = "chrome";
+        Configuration.timeout = 10000;
+        open("https://edujira.ifellow.ru");
+        WebDriverRunner.getWebDriver().manage().window().maximize();
+        loginPage = new LoginPage();
+        projectPage = new ProjectPage();
     }
 
     @Test(priority = 1)
-    public void testLogin() throws InterruptedException {
+    public void testLogin() {
         loginPage.login("AT9", "Qwerty123");
-        Assert.assertTrue(driver.getCurrentUrl().contains("Dashboard"), "Авторизация не выполнена");
+        Assert.assertTrue(url().contains("Dashboard"), "Авторизация не выполнена");
     }
 
     @Test(priority = 2)
-    public void testOpenProject() throws InterruptedException {
+    public void testOpenProject() {
         loginPage.login("AT9", "Qwerty123");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         projectPage.openProject();
-        Assert.assertTrue(driver.getCurrentUrl().contains("TEST"), "Не найден раздел TEST");
+        Assert.assertTrue(url().contains("TEST"), "Не найден раздел TEST");
     }
 
     @Test(priority = 3)
     public void testTaskCounter() {
         loginPage.login("AT9", "Qwerty123");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         projectPage.openProject();
         int initialTaskCount = projectPage.getTaskCount();
         projectPage.createTask("Новая тема");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
         int updatedTaskCount = projectPage.getTaskCount();
         projectPage.closeTask();
@@ -56,13 +54,9 @@ public class Tests {
     @Test(priority = 4)
     public void testOpenTask() {
         loginPage.login("AT9", "Qwerty123");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         projectPage.openProject();
-        int initialTaskCount = projectPage.getTaskCount();
         projectPage.createTask("Новая тема");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
-        int updatedTaskCount = projectPage.getTaskCount();
         projectPage.closeTask();
         projectPage.findTask("TestSeleniumATHomework");
         projectPage.foundTask();
@@ -73,27 +67,18 @@ public class Tests {
     }
 
     @Test(priority = 5)
-    public void testCreateBug() throws InterruptedException  {
+    public void testCreateBug() {
         loginPage.login("AT9", "Qwerty123");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         projectPage.openProject();
-        int initialTaskCount = projectPage.getTaskCount();
         projectPage.createTask("Новая тема");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         projectPage.openProject();
-        int updatedTaskCount = projectPage.getTaskCount();
         projectPage.closeTask();
         projectPage.findTask("TestSeleniumATHomework");
         projectPage.foundTask();
-        String status = projectPage.checkSentense();
-        String version = projectPage.checkVersion();
         projectPage.selectErrorOption("Это баг", "Новый баг");
         projectPage.createTaskBug();
-        Assert.assertTrue(driver.getCurrentUrl().contains("Dashboard"), "Не создана форма бага");
-    } // я как понимаю, иногда автотест может не выполнять функции(к примеру, когда он всегда выводит логин и пароль, а 1 раз он просто застынет и остановится тест)
-
-    @AfterClass
-    public void tearDown() {
-        if (driver != null) {driver.quit();}
+        Assert.assertTrue(url().contains("Dashboard"), "Не создана форма бага");
     }
+
+    @AfterClass public void tearDown() {closeWebDriver();}
 }

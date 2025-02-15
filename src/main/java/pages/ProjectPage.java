@@ -1,65 +1,39 @@
 package pages;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import java.util.List;
+
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selectors.*;
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys; // Это использовалось только для того, чтобы переключиться с типа задачи "Задача" на "Ошибка"
 
 public class ProjectPage extends BasePage {
 
-    @FindBy(xpath = "//a[text()='Проекты']") private WebElement projectsClick;
-
-    @FindBy(xpath = "//a[text()='Test (TEST)']") private WebElement testProjectLink;
-
-    @FindBy(xpath = "//*[@id=\"quickSearchInput\"]") private WebElement searchTaskButton;
-
-    @FindBy(xpath = "//li[a/span[text()='TestSeleniumATHomework']]/a\n") private WebElement clickSearchTaskButton;
-
-    @FindBy(xpath = "//*[contains(text(), 'Сделать')]") private WebElement checkWordsTask;
-
-    @FindBy(xpath = "//*[contains(text(), 'Version 2.0')]") private WebElement checkVersionTask;
-
-    @FindBy(xpath = "//*[@id=\"create-menu\"]") private WebElement clickTask;
-
-    @FindBy(xpath = "//*[@id=\"summary\"]") private WebElement nameTask;
-
-    @FindBy(xpath = "//*[@id=\"create-issue-submit\"]") private WebElement clickMakeTask;
-
-    @FindBy(xpath = "//div[@class='issue-tools']//div[@class='showing']/span\n") private WebElement taskCounter;
-
-    @FindBy(xpath = "//select[@id='fixVersions']//option[contains(text(), 'Version 2.0')]\n") private WebElement clickVersion;
-
-    @FindBy(xpath = "//select[@id='versions']//option[contains(text(), 'Version 2.0')]\n") private WebElement clickVersion1;
-
-    @FindBy(xpath = "//span[@id='logo' and .//a[@href='https://edujira.ifellow.ru/secure/MyJiraHome.jspa']]\n") private WebElement clickMainPage;
-
-    @FindBy(xpath = "//span[@class='trigger-label' and text()='В работе']\n") private WebElement inWorking;
-
-    @FindBy(xpath = "//*[@id=\"opsbar-transitions_more\"]") private WebElement buisnessProcess;
-
-    @FindBy(xpath = "//span[@class='trigger-label' and text()='Выполнено']\n") private WebElement isDone;
-
-    @FindBy(xpath = "//*[@id='10003' and //a[starts-with(text(),’TEST-17’)']\n") private WebElement findTaskBug;
-
-    @FindBy(xpath = "//*[@id=\"labels-textarea\"]") private WebElement writeTag;
-
-    @FindBy(xpath = "//*[@id=\"labels-multi-select\"]") private WebElement clickTag;
-
-    @FindBy(xpath = "//*[@id=\"find_link\"]") private WebElement clickListTask;
-
-    public ProjectPage(WebDriver driver) {super(driver);}
+    private final SelenideElement projectsClick = $(byText("Проекты"));
+    private final SelenideElement testProjectLink = $(byText("Test (TEST)"));
+    private final SelenideElement searchTaskButton = $("#quickSearchInput");
+    private final SelenideElement clickSearchTaskButton = $x("//li[a/span[text()='TestSeleniumATHomework']]/a");
+    private final SelenideElement checkWordsTask = $x("//*[contains(text(), 'Сделать')]");
+    private final SelenideElement checkVersionTask = $x("//*[contains(text(), 'Version 2.0')]");
+    private final SelenideElement clickTask = $("#create-menu");
+    private final SelenideElement nameTask = $("#summary");
+    private final SelenideElement clickMakeTask = $("#create-issue-submit");
+    private final SelenideElement taskCounter = $x("//div[@class='issue-tools']//div[@class='showing']/span");
+    private final SelenideElement clickVersion = $x("//select[@id='fixVersions']//option[contains(text(), 'Version 2.0')]");
+    private final SelenideElement clickVersion1 = $x("//select[@id='versions']//option[contains(text(), 'Version 2.0')]");
+    private final SelenideElement clickMainPage = $x("//span[@id='logo']//a[@href='https://edujira.ifellow.ru/secure/MyJiraHome.jspa']");
+    private final SelenideElement inWorking = $(byText("В работе"));
+    private final SelenideElement buisnessProcess = $("#opsbar-transitions_more");
+    private final SelenideElement isDone = $(byText("Выполнено"));
+    private final SelenideElement findTaskBug = $("//*[@id='10003' and //a[starts-with(text(),'TEST-17')]");
+    private final SelenideElement writeTag = $("#labels-textarea");
+    private final SelenideElement clickTag = $("#labels-multi-select");
+    private final SelenideElement clickListTask = $("#find_link");
 
     public void openProject() {
         projectsClick.click();
         testProjectLink.click();
     }
 
-    public void findTask(String searchTask) {searchTaskButton.sendKeys(searchTask);}
+    public void findTask(String searchTask) {searchTaskButton.setValue(searchTask);}
 
     public void foundTask() {clickSearchTaskButton.click();}
 
@@ -67,23 +41,17 @@ public class ProjectPage extends BasePage {
 
     public String checkVersion() {return checkVersionTask.getText();}
 
-    public int getTaskCount() {
-        String counterText = taskCounter.getText();
-        String[] parts = counterText.split(" ");
-        return Integer.parseInt(parts[2]);
-    }
+    public int getTaskCount() {return Integer.parseInt(taskCounter.getText().split(" ")[2]);}
 
     public void createTask(String taskName) {
         clickTask.click();
-        nameTask.sendKeys(taskName);
+        nameTask.setValue(taskName);
         clickMakeTask.click();
     }
 
     public void closeTask() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         clickListTask.click();
-        WebElement firstTaskLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='issues_history_main']//li[2]//a")));
-        firstTaskLink.click();
+        $x("//div[@id='issues_history_main']//li[2]//a").click();
         inWorking.click();
         buisnessProcess.click();
         isDone.click();
@@ -91,50 +59,36 @@ public class ProjectPage extends BasePage {
     }
 
     public void createTaskBug() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(clickVersion)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(clickVersion1)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(clickMakeTask)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(clickMainPage)).click();
+        clickVersion.click();
+        clickVersion1.click();
+        clickMakeTask.click();
+        clickMainPage.click();
         clickListTask.click();
-        WebElement firstTaskLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='issues_history_main']//li[1]//a")));
-        firstTaskLink.click();
+        $x("//div[@id='issues_history_main']//li[1]//a").click();
         inWorking.click();
         buisnessProcess.click();
         isDone.click();
-        wait.until(ExpectedConditions.elementToBeClickable(clickMainPage)).click();
+        clickMainPage.click();
         clickTask.click();
-        WebElement taskDropdown = driver.findElement(By.xpath("//*[@id='issuetype-single-select']"));
-        taskDropdown.click();
-        Actions actions = new Actions(driver);
-        actions.sendKeys(Keys.ENTER).perform();
+        $("#issuetype-single-select").click();
+        actions().sendKeys(Keys.ENTER).perform();
     }
 
     public void selectErrorOption(String taskName, String description) {
         clickTask.click();
-        WebElement taskDropdown = driver.findElement(By.xpath("//*[@id='issuetype-single-select']"));
-        taskDropdown.click();
-        Actions actions = new Actions(driver);
-        actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(nameTask));
-        nameTask.click();
-        nameTask.sendKeys(taskName);
-        List<WebElement> iframes = driver.findElements(By.xpath("//iframe[contains(@id, 'mce')]"));
-        driver.switchTo().frame(iframes.get(0));
-        WebElement firstWriteText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body[@id='tinymce']")));
-        firstWriteText.clear();
-        firstWriteText.sendKeys(description);
-        driver.switchTo().defaultContent();
+        $("#issuetype-single-select").click();
+        actions().sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+        nameTask.setValue(taskName);
+        switchTo().frame($$("iframe[id*='mce']").first());
+        $("body#tinymce").clear();
+        $("body#tinymce").setValue(description);
+        switchTo().defaultContent();
         clickTag.click();
-        writeTag.sendKeys("bugs");
-        actions.sendKeys(Keys.ENTER).perform();
-        driver.switchTo().frame(iframes.get(1));
-        WebElement secondWriteText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body[@id='tinymce']")));
-        secondWriteText.clear();
-        secondWriteText.sendKeys("Java");
-        driver.switchTo().defaultContent();
+        writeTag.setValue("bugs");
+        actions().sendKeys("ENTER").perform();
+        switchTo().frame($$("iframe[id*='mce']").get(1));
+        $("body#tinymce").clear();
+        $("body#tinymce").setValue("Java");
+        switchTo().defaultContent();
     }
 }
-
-
