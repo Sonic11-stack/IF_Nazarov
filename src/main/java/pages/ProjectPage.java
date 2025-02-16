@@ -1,12 +1,14 @@
 package pages;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selectors.*;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Keys; // Это использовалось только для того, чтобы переключиться с типа задачи "Задача" на "Ошибка"
 
-public class ProjectPage extends BasePage {
+import java.time.Duration;
 
+public class ProjectPage extends BasePage {
     private final SelenideElement projectsClick = $(byText("Проекты"));
     private final SelenideElement testProjectLink = $(byText("Test (TEST)"));
     private final SelenideElement searchTaskButton = $("#quickSearchInput");
@@ -51,8 +53,10 @@ public class ProjectPage extends BasePage {
     public void closeTask() {
         clickListTask.click();
         $x("//div[@id='issues_history_main']//li[2]//a").click();
-        inWorking.click();
+        inWorking.shouldBe(visible, Duration.ofSeconds(4)).click();
+        sleep(2000);
         buisnessProcess.click();
+        sleep(2000);
         isDone.click();
         clickMainPage.click();
     }
@@ -61,11 +65,16 @@ public class ProjectPage extends BasePage {
         clickVersion.click();
         clickVersion1.click();
         clickMakeTask.click();
+    }
+
+    public void closeBugTask() {
         clickMainPage.click();
         clickListTask.click();
         $x("//div[@id='issues_history_main']//li[1]//a").click();
-        inWorking.click();
+        inWorking.shouldBe(visible, Duration.ofSeconds(4)).click();
+        sleep(2000);
         buisnessProcess.click();
+        sleep(2000);
         isDone.click();
         clickMainPage.click();
         clickTask.click();
